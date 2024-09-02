@@ -54,8 +54,9 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    LatestTag=$BUILD_NUMBER
                     cd deploy/
-                    sed -i 's/ImageTag/${BUILD_NUMBER}/g' deploy.yaml
+                    sed -i 's/ImageTag/$LatestTag/g' deploy.yaml
                     git add .
                     git commit -m "Update Docker Build image number $BUILD_NUMBER"
                     '''
