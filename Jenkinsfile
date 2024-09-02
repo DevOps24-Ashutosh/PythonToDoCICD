@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
     stages {
         stage('Clean Workspace') {
             steps {
@@ -16,6 +19,25 @@ pipeline {
                 sh '''
                 echo "Building Docker Image from the Repos Dockerfile"
                 docker build -t ashuto91/pytodo:${BUILD_NUMBER} .
+                '''
+            }
+        }
+        stage("Push docker Image to DockerHub") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerHubCred', passwordVariable: 'DockerHub-Password', usernameVariable: 'DockerHub-Username')]) {
+                    sh 'docker login -u $usernameVariable -p $passwordVariable'   
+                }
+                sh '''
+                echo "Pushing the docker Image built in previous Images is being push to docker hub"
+                docker push ashuto91/pytodo:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage("Removing the previous Build Image") {
+            steps {
+                sh '''
+                echo "Removing the previous built image"
+                docker rmi ashuto91/pytodo:${BUILD_NUMBER}
                 '''
             }
         }
