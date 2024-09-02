@@ -25,7 +25,7 @@ pipeline {
         stage("Push docker Image to DockerHub") {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerHubCred', passwordVariable: 'DockerHub-Password', usernameVariable: 'DockerHub-Username')]) {
-                    sh 'docker login -u $usernameVariable -p $passwordVariable'   
+                    sh 'docker login -u $DockerHub-Username -p $DockerHub-Password'   
                 }
                 sh '''
                 echo "Pushing the docker Image built in previous Images is being push to docker hub"
