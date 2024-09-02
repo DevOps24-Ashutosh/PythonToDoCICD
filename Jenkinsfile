@@ -50,5 +50,18 @@ pipeline {
                 '''
             }
         }
+        stage("Updating the k8 manifest") {
+            steps {
+                script {
+                    sh '''
+                    cd deploy/
+                    sed -i 's/ImageTag/$BUILD_NUMBER' deploy.yaml
+                    git add .
+                    git commit -m "Update Docker Build image number $BUILD_NUMBER"
+                    git push https://github.com/iam-veeramalla/cicd-demo-manifests-repo.git HEAD:main
+                    '''
+                }
+            }
+        }
     }
 }
