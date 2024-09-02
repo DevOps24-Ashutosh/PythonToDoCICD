@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh '''
                 echo "Building Docker Image from the Repos Dockerfile"
-                docker build -it ashuto91/pytodo:${BUILD_NUMBER} .
+                docker build -t ashuto91/pytodo:${BUILD_NUMBER} .
                 '''
             }
         }
