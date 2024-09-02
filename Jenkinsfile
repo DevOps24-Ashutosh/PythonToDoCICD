@@ -58,8 +58,11 @@ pipeline {
                     sed -i 's/ImageTag/$BUILD_NUMBER/g' deploy.yaml
                     git add .
                     git commit -m "Update Docker Build image number $BUILD_NUMBER"
-                    git push https://github.com/iam-veeramalla/cicd-demo-manifests-repo.git HEAD:main
+                    // git push https://github.com/iam-veeramalla/cicd-demo-manifests-repo.git HEAD:main
                     '''
+                    withCredentials([gitUsernamePassword(credentialsId: 'gitHubToken', gitToolName: 'Default')]) {
+                        git push origin main
+                    }
                 }
             }
         }
