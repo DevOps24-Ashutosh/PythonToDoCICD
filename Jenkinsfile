@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
+        registryCredential = 'dockerHubCred'
     }
     stages {
         stage('Clean Workspace') {
@@ -24,13 +25,19 @@ pipeline {
         }
         stage("Push docker Image to DockerHub") {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerHubCred', passwordVariable: 'DockerHub-Password', usernameVariable: 'DockerHub-Username')]) {
-                    sh 'docker login -u $DockerHub-Username -p $DockerHub-Password'   
-                }
-                sh '''
-                echo "Pushing the docker Image built in previous Images is being push to docker hub"
-                docker push ashuto91/pytodo:${BUILD_NUMBER}
+                // withCredentials([usernamePassword(credentialsId: 'dockerHubCred', passwordVariable: 'DockerHub-Password', usernameVariable: 'DockerHub-Username')]) {
+                //     sh 'docker login -u $DockerHub-Username -p $DockerHub-Password --password-stdin'   
+                // }
+                docker.withRegistry('', registryCredential) {
+                    sh '''
+                    echo "Pushing the docker Image built in previous Images is being push to docker hub"
+                    docker push ashuto91/pytodo:${BUILD_NUMBER}
                 '''
+                }
+                // sh '''
+                // echo "Pushing the docker Image built in previous Images is being push to docker hub"
+                // docker push ashuto91/pytodo:${BUILD_NUMBER}
+                // '''
             }
         }
         stage("Removing the previous Build Image") {
