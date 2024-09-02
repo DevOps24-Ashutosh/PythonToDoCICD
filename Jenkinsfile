@@ -55,7 +55,7 @@ pipeline {
                 script {
                     sh '''
                     cd deploy/
-                    sed -i 's/ImageTag/$BUILD_NUMBER' deploy.yaml
+                    sed -i 's/ImageTag/$BUILD_NUMBER/g' deploy.yaml
                     git add .
                     git commit -m "Update Docker Build image number $BUILD_NUMBER"
                     git push https://github.com/iam-veeramalla/cicd-demo-manifests-repo.git HEAD:main
