@@ -55,12 +55,12 @@ pipeline {
                 script {
                     sh '''
                     cd deploy/
-                    sed -i 's/ImageTag/$BUILD_NUMBER/g' deploy.yaml
+                    sed -i 's/ImageTag/${BUILD_NUMBER}/g' deploy.yaml
                     git add .
                     git commit -m "Update Docker Build image number $BUILD_NUMBER"
                     '''
                     withCredentials([gitUsernamePassword(credentialsId: 'gitHubToken', gitToolName: 'Default')]) {
-                        git push origin main
+                        sh "git push origin main"
                     }
                 }
             }
