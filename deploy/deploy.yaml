@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: todo
-        image: ashuto91/pytodo:${BUILD_NUMBER}
+        image: ashuto91/pytodo:$ImageTag
         ports:
         - containerPort: 8000
